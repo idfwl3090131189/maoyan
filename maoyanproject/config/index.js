@@ -11,6 +11,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+
       '/hy':{
         target:'http://m.maoyan.com',
         changeOrigin:true,
@@ -20,7 +21,25 @@ module.exports = {
         target:'https://api.douban.com',
         changeOrigin:true,
         pathRewrite:{'^/xq':''}
-     }
+     },
+
+      '/hehe':{
+        target:'http://m.maoyan.com',
+        changeOrigin:true,
+        pathRewrite:{'^/hehe':''}
+      },
+      '/xixi':{
+        target:'http://m.maoyan.com',
+        changeOrigin:true,
+        pathRewrite:{'^/xixi':''}
+      },
+      '/haha':{
+        target:'http://m.maoyan.com',
+        changeOrigin:true,
+        pathRewrite:{'^/haha':''}
+
+      }
+
     },
 
     // Various Dev Server settings

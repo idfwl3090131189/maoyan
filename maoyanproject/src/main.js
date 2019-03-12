@@ -17,6 +17,12 @@ Vue.use(LazyLoad,{
   loading: require('assets/logo.png'),//在js 中通过require 加载图片
   attempt: 1
 })
+
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+Vue.use(MintUI)
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

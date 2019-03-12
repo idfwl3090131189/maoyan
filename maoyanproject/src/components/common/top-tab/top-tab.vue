@@ -52,6 +52,7 @@ export default {
     .w(375);
     .h(44);
     .l_h(44);
+    border-bottom:1px solid #efefef;
     background: #fff;
     font-size: @font-size-m;
     font-weight: 200;
