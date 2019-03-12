@@ -6,6 +6,7 @@ import Being from 'pages/being/being'
 import Soon from 'pages/soon/soon'
 import Movie from 'pages/movie/movie'
 import Cinema from 'pages/cinema/cinema'
+import Moviemess from 'pages/moviemess/moviemess'
 import My from 'pages/my/my'
 export default new Router({
   routes: [
@@ -22,7 +23,13 @@ export default new Router({
       path: 'soon',
       name: 'soon',
       component: Soon
-     }]
+     },
+     {
+      path: 'moviemess',
+      name: 'moviemess',
+      component: Moviemess
+     }
+     ]
      },
      {
         path: '/cinema',

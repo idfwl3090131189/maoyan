@@ -7,6 +7,10 @@ import './common/style/reset.css'
 import Axios from './axios'
 Vue.prototype.$axios=Axios;
 Vue.config.productionTip = false
+//引入ui框架
+import MintUI from 'mint-ui';
+import 'mint-ui/lib/style.css';
+Vue.use(MintUI);
 //图片懒加载
 import LazyLoad from 'vue-lazyload';
 Vue.use(LazyLoad,{

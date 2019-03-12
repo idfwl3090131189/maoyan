@@ -26,9 +26,12 @@ export default {
     position: fixed;
     bottom: 0;
     .w(375);
+    .h(48);
+    .l_h(48);
     display: flex;
     justify-content: space-around;
     font-size:@font-size-m;
+    background: #fff;
     .sel{
         color:red;
     }
