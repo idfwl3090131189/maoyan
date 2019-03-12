@@ -37,7 +37,7 @@
                 </li>
             </ul>
             <ul class='addrDetail'>
-                <li v-for='text in movList[index].detail[0].cinemas'>
+                <li v-for='(text,index) in movList[index].detail[0].cinemas' :key="index">
                     <h4>{{text.nm}} <span><i>{{text.sellPrice}}</i>元起</span></h4>
                     <h5><em>{{text.addr}}</em> <span>{{text.distance}}</span></h5>
                     <h6>
@@ -45,7 +45,8 @@
                         <span v-if='text.tag.endorse' class='blue'>改签</span>
                         <span v-if='text.tag.snack'>小吃</span>
                         <span v-if='text.tag.vipTag'>{{text.tag.vipTag}}</span>
-                        <span v-if='text.tag.hallType' 
+                        <span v-if='text.tag.vipTag'>{{text.tag.vipTag}}</span>
+                        <span v-show="text.tag.hallType"
                             v-for='(hal,index) in text.tag.hallType' 
                             :key='index' 
                             class='blue hal'>
