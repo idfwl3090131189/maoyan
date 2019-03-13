@@ -221,9 +221,7 @@ export default {
                     overflow: hidden;
                     text-overflow: ellipsis;
                 };
-                span{
-
-                };
+                
             }
             .tag{
                 .h(24);

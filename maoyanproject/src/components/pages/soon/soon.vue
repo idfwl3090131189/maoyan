@@ -52,13 +52,13 @@ export default {
          this.$router.push({name:'moviemess',params:{id:27166442}})
         },
         skip(){
-            this.$router.push("/cinema")
+            this.$router.push("/cinema");
         }
 
     },
     created() {
     let url='/hy/ajax/mostExpected?ci=1&limit=16&offset=0&token=';
-    let url2='/hy/ajax/comingList?ci=1&token=&limit=16';
+    let url2='/sy/ajax/comingList?ci=1&token=&limit=16';
     this.$axios.get(url)
     .then((res)=>{
        for(var item of res.coming){
@@ -70,7 +70,7 @@ export default {
     this.$axios.get(url2)
     .then((res)=>{
     //    this.list2=res.coming;
-       console.log(res.coming);
+      // console.log(res.coming);
        let list2={
            '':{
                     title:'',
@@ -106,7 +106,7 @@ export default {
                })
            }        
         }
-       console.log(list2);
+       //console.log(list2);
        this.movie=list2;
     })
  },

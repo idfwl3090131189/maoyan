@@ -1,7 +1,7 @@
 <template>
     <div class="movie-detail">
         <div class="mheader">
-            <span class='sign' @click='back'> 返回 </span>
+            <span class='sign' @touchstart='back'> 返回 </span>
             <p>{{params.nm}}</p>
         </div>
         <div class='movie-bg'>
@@ -30,14 +30,17 @@
             <ul class='day'>
                 <li 
                 v-for='(item,index) in movList' 
-                :key='index' @click='go(index)' 
+                :key='index' @touchstart='go(index)' 
                 :class="sel==index?'red':''"
                 >
                     {{item.day}}
                 </li>
             </ul>
             <ul class='addrDetail'>
-                <li v-for='(text,index) in movList[index].detail[0].cinemas' :key="index">
+                <li v-for='(text,index) in movList[index].detail[0].cinemas' 
+                :key="index"
+                @click="tzcinema"
+                >
                     <h4>{{text.nm}} <span><i>{{text.sellPrice}}</i>元起</span></h4>
                     <h5><em>{{text.addr}}</em> <span>{{text.distance}}</span></h5>
                     <h6>
@@ -61,7 +64,7 @@
     </div>
 </template>
 <script>
-import Data from "data/moviedetail.js"
+import Data from "sta/moviedetail.js"
 export default {
     name:'moviedetail',
     data(){
@@ -73,6 +76,9 @@ export default {
         }
     },
     methods:{
+        tzcinema(){
+           this.$router.push({path:"/cinema"});
+       },
         go(index){
             this.index = index
             this.sel = index
@@ -89,7 +95,7 @@ export default {
                     movieId:Data[i].movieId
                 })
             }
-            console.log(arr); 
+            //console.log(arr); 
             this.movList = arr   
        
         },
@@ -105,7 +111,7 @@ export default {
             return this.$router.replace('/movie/being')
         }
         //获取电影详情
-        let url=`/xixi/ajax/detailmovie?movieId=${this.params.id}`
+        let url=`/haha/ajax/detailmovie?movieId=${this.params.id}`
         this.$axios.get(url)
             .then((res)=>{
                 let data = res.detailMovie
@@ -171,7 +177,7 @@ export default {
         background-color: #333;
         img{
             width:100%;
-            .h(170);
+            .h(188);
             opacity:.55;
             filter:blur(20px);      
             }

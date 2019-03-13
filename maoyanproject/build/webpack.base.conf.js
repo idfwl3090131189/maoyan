@@ -31,9 +31,14 @@ module.exports = {
       'pages':resolve('src/components/pages'),
       'common':resolve('src/components/common'),
       'assets':resolve('src/assets'),
-      'data':resolve('src/data')
+      'data':resolve('src/data'),
+      'sta':resolve('static')
     }
   },
+  //通过域名访问页面时的配置项
+devServer: { 
+	disableHostCheck: true
+},
   module: {
     rules: [
       {

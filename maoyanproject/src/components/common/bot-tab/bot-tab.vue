@@ -3,20 +3,26 @@
        <router-link to="/movie/being" tag="div"
        active-class="sel"
        >
-       <p><i class='iconfont'>&#xe6ee;</i></p>
-       <p>电影</p>
+       <p>
+           <i class='iconfont'>&#xe6ee;</i><br>
+           
+       </p>
+       <p class="zt">电影</p>
        </router-link>
        <router-link to="/cinema" tag="div"
        active-class="sel"
        >
-       <p><i class='iconfont'>&#xe61d;</i></p>
-       <p>影院</p>
+       <p>
+           <i class='iconfont'>&#xe61d;</i>
+           
+       </p>
+       <p class="zt">影院</p>
        </router-link>
        <router-link to="/my" tag="div"
        active-class="sel"
        >
        <p><i class='iconfont'>&#xe615;</i></p>
-       <p>我的</p>
+       <p class="zt">我的</p>
        </router-link>
     </div>
 </template>
@@ -37,7 +43,7 @@ export default {
     bottom: 0;
     .w(375);
     .h(48);
-    .l_h(48);
+    // .l_h(48);
     display: flex;
     font-size:@font-size-s;
     justify-content: space-around;
@@ -60,5 +66,8 @@ export default {
     .sel{
         color:red;
     }
+}
+.zt{
+    font-size: 12px !important;
 }
 </style>

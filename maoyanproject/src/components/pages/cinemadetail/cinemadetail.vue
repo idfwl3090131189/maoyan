@@ -1,7 +1,7 @@
 <template>
     <div class="cmdetail">
         <div class="hed">
-            <p class="back" @click="back">返回</p>
+            <p class="back" @touchstart="back">返回</p>
             <p class="nm">{{params.nm}}</p>      
         </div>
         <div class="section">
@@ -36,7 +36,7 @@
                     <div class="nav-tab"> 
                         <span v-for="(item,index)  in  shows"
                         :key="index"
-                        @click="getCineme(index)"
+                        @touchstart="getCineme(index)"
                         :class="cianmeIndex===index?'red':''"
                         >{{item.dateShow}}
                         </span> 
@@ -52,14 +52,14 @@
                             </div>
                             <div class="info-block">
                                 <p>{{item.lang}}   {{item.tp}}</p>
-                                <p class="f5">{{item.th}}</p>
+                                <p class="f5 timeswitch">{{item.th}}</p>
                             </div>
                         <div class="price">
-                            <p><span class="vipPrice">￥{{item.vipPrice}}</span>{{item.vipPriceName}}</p>
+                            <p><span class="vipPrice">￥{{item.vipPrice?item.vipPrice:30}}</span>{{item.vipPriceName}}</p>
                             <p class='f5'>{{item.extraDesc}}</p>
                         </div>
                         <div>
-                            <span class="buytick" @click="buytick">购票</span>
+                            <span class="buytick" @touchstart="buytick">购票</span>
                         </div>
                             </li>
                         </ul>
@@ -67,7 +67,7 @@
                 </div>  
         </div>
         <!-- 影院套餐 -->
-        <div class="tuan-list">
+        <div class="tuan-list" v-if="tuanDealList.length">
             <h3>影院超值套餐</h3>
             <ul>
                 <li v-for="(item,index) in tuanDealList"
@@ -79,7 +79,7 @@
                     <div class="item-info">
                         <p><span class="PersonNum">{{item.recommendPersonNum}}</span>{{item.title}}  </p>
                         <p class="curNumberDesc">{{item.curNumberDesc}}</p>
-                        <p><span class="price">￥{{item.price}}</span><span class="buyButton" @click="buytick">去购买</span></p>  
+                        <p><span class="price">￥{{item.price}}</span><span class="buyButton" @touchstart="buytick">去购买</span></p>  
                     </div>
                 </li>
             </ul>
@@ -108,7 +108,7 @@ export default {
         },  
         //获取时间日期对应的数组下标
         getCineme(index){
-            console.log(index)
+            //console.log(index)
             this.cianmeIndex=index;
         },  
         //时间转换
@@ -148,7 +148,7 @@ export default {
                 })
             }
             this.moviesList = lists 
-            console.log(this.moviesList) 
+            //console.log(this.moviesList) 
         },
         // 处理套餐信息
         tuanData(data){
@@ -197,7 +197,7 @@ export default {
         let url=`/hehe/ajax/cinemaDetail?cinemaId=${this.params.id}`
         this.$axios.get(url)
         .then((res)=>{
-            console.log(res) 
+            ///console.log(res) 
             //电影信息    
              this.normalData(res.showData.movies);
              //套餐信息
@@ -358,6 +358,12 @@ export default {
                             font-size: @font-size-s;
                             white-space: nowrap;
                         }
+                    .timeswitch{
+                        .w(92);
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
                     .buytick{
                         display: block;
                         width: 100%;

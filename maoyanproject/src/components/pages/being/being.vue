@@ -52,21 +52,21 @@ export default {
                 })
             }
             this.movieList = lists
-            console.log(this.movieList)   
+           // console.log(this.movieList)   
         }
     },
     created(){
-        let url = '/hehe/ajax/movieOnInfoList?token='
+        let url = '/xixi/ajax/movieOnInfoList?token='
         let params = {};
        // let url ='http://m.maoyan.com/ajax/moreComingList?token=&movieIds=1228761%2C1225543%2C1261537%2C1212492%2C580298%2C1214652%2C1243239%2C1251817%2C507792%2C344262'
         this.$axios.get(url)
         .then((res)=>{
-            console.log(res)
+            //console.log(res)
             let data = res.movieList
             this.normalData(data)          
         })
         .catch((err)=>{
-            console.log(err)
+            //console.log(err)
         })
          setTimeout(()=>{
               this.scroll = new BScroll('.wrapper',{click:true}) //this值得是当前vue

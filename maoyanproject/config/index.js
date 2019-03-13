@@ -22,6 +22,11 @@ module.exports = {
         changeOrigin:true,
         pathRewrite:{'^/xq':''}
      },
+     '/sy':{
+        target:'http://m.maoyan.com',
+        changeOrigin:true,
+        pathRewrite:{'^/sy':''}
+     },
 
       '/hehe':{
         target:'http://m.maoyan.com',

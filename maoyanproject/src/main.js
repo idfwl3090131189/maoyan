@@ -18,9 +18,6 @@ Vue.use(LazyLoad,{
   attempt: 1
 })
 
-import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.css'
-Vue.use(MintUI)
 
 
 /* eslint-disable no-new */
