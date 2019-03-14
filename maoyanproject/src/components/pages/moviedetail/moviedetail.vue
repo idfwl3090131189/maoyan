@@ -153,7 +153,7 @@ export default {
             return this.$router.replace('/movie/being')
         }
         //获取电影详情
-        let url=`/xixi/ajax/detailmovie?movieId=${this.params.id}`
+        let url=`/haha/ajax/detailmovie?movieId=${this.params.id}`
         this.$axios.get(url)
             .then((res)=>{
                 let data = res.detailMovie
