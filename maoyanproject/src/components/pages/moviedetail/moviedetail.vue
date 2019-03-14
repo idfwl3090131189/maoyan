@@ -92,7 +92,7 @@ export default {
             this.sel = index
         },
         go(index){
-        let murl = `/xixi/ajax/movie?forceUpdate=${new Date().getTime()}`
+        let murl = `/dd/ajax/movie?forceUpdate=${new Date().getTime()}`
         let now = new Date()
         let time = now.getFullYear()+'-'+[(now.getMonth()+1)>10?(now.getMonth()+1):('0'+(now.getMonth()+1))]+'-'+ (now.getDate()+index)
         this.$axios.post(murl,{
