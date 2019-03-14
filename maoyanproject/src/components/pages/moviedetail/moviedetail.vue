@@ -1,7 +1,7 @@
 <template>
     <div class="movie-detail">
         <div class="mheader">
-            <span class='sign' @touchstart='back'> 返回 </span>
+            <span class='sign' @click='back'> 返回 </span>
             <p>{{params.nm}}</p>
         </div>
         <div class='movie-bg'>
@@ -14,8 +14,7 @@
                 <p class='enm'>{{datas.enm}}</p>
                 <p class='ping'>
                     <span class="sc">{{datas.sc}}</span> 
-                    <span class='snum'>({{(datas.snum/10000).toFixed(1)}}万人评论)</span>
-                    
+                    <span class='snum'>({{(datas.snum/10000).toFixed(1)}}万人评论)</span> 
                 </p>
                 <p class='imax'>{{datas.cat}} 
                     <img src="../../../common/img/imax.png" alt="" v-show='datas.version'>
@@ -27,19 +26,22 @@
         </div>
 
         <div class='addr-link'>
-            <ul class='day'>
-                <li 
-                v-for='(item,index) in movList' 
-                :key='index' @touchstart='go(index)' 
-                :class="sel==index?'red':''"
-                >
-                    {{item.day}}
-                </li>
-            </ul>
+            <div class="wrapper gun">
+                <ul class='day content'>
+                        <li 
+                        v-for='(item,index) in movList' 
+                        :key='index' @touchstart='going(index)' 
+                        :class="sel==index?'red':''"
+                        >
+                            {{item.day}}
+                        </li>
+                </ul>
+            </div> 
             <ul class='addrDetail'>
-                <li v-for='(text,index) in movList[index].detail[0].cinemas' 
+                <li 
+                v-for='(text,index) in movList[index].detail[0].cinemas' 
                 :key="index"
-                @click="tzcinema"
+                @click='gocinema'
                 >
                     <h4>{{text.nm}} <span><i>{{text.sellPrice}}</i>元起</span></h4>
                     <h5><em>{{text.addr}}</em> <span>{{text.distance}}</span></h5>
@@ -47,7 +49,6 @@
                         <span v-if='text.tag.allowRefund'>退</span>
                         <span v-if='text.tag.endorse' class='blue'>改签</span>
                         <span v-if='text.tag.snack'>小吃</span>
-                        <span v-if='text.tag.vipTag'>{{text.tag.vipTag}}</span>
                         <span v-if='text.tag.vipTag'>{{text.tag.vipTag}}</span>
                         <span v-show="text.tag.hallType"
                             v-for='(hal,index) in text.tag.hallType' 
@@ -60,44 +61,81 @@
                     <p>近期场次：{{text.showTimes}}</p>
                 </li>
             </ul>
+          
         </div>
     </div>
 </template>
 <script>
-import Data from "sta/moviedetail.js"
+import BScroll from 'better-scroll'
 export default {
     name:'moviedetail',
     data(){
         return {
            datas:{},
-           movList:[{day:'',detail:[{}],movieId:''}],
+           movList:[{day:'',
+                    detail:[{}],
+                    movieId:''}],
+           list:[],
            index:0,
-           sel:0
+           sel:0,
+           time:0,
+           arr:[]
         }
+        
     },
     methods:{
-        tzcinema(){
-           this.$router.push({path:"/cinema"});
-       },
-        go(index){
+        gocinema(){
+            this.$router.push({path:'/cinema'})
+        },
+        going(index){
             this.index = index
             this.sel = index
+        },
+        go(index){
+        let murl = `/xixi/ajax/movie?forceUpdate=${new Date().getTime()}`
+        let now = new Date()
+        let time = now.getFullYear()+'-'+[(now.getMonth()+1)>10?(now.getMonth()+1):('0'+(now.getMonth()+1))]+'-'+ (now.getDate()+index)
+        this.$axios.post(murl,{
+            movieId: `${this.params.id}`,
+            day:time,
+            offset: 0,
+            limit: 20,
+            districtId: -1,
+            lineId: -1,
+            hallType: -1,
+            brandId: -1,
+            serviceId: -1,
+            areaId: -1,
+            stationId: -1,
+            item: '',
+            updateShowDay: true,
+            reqId: '1552487216715',
+            cityId: 1,
+        })
+        .then((data)=>{
+            //console.log(data)
+            this.normalData(data)
+
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
         },
         back(){
             this.$router.back()
         },
         normalData(Data){
-            let arr = []
-            for( var i = 0 ; i < Data.length ; i++ ){
-                arr.push({
-                    day:(new Date(Data[i].day).getMonth()+1)+'月'+(new Date(Data[i].day).getDate())+'日',
-                    detail:[{cinemas:Data[i].cinemas}],
-                    movieId:Data[i].movieId
+                this.arr.push({
+                    day:(new Date(Data.day).getMonth()+1)+'月'+(new Date(Data.day).getDate())+'日',
+                    detail:[{cinemas:Data.cinemas}],
+                    movieId:Data.movieId
                 })
-            }
-            //console.log(arr); 
-            this.movList = arr   
-       
+            this.movList = this.arr 
+            this.arr.sort((a,b)=>{
+                    return a.day.substr(2,2) - b.day.substr(2,2)
+                    // new Date(a.day)-new Date(b.day)
+            })  
+           // console.log(this.arr)
         },
     },
     computed:{
@@ -107,30 +145,30 @@ export default {
         },
     },
     created(){
+        for(var i = 0 ; i < 7 ; i++){
+            this.go(i)
+        }
+        
        if(!this.$route.params.nm){//params 没有的时候是个空对象
             return this.$router.replace('/movie/being')
         }
         //获取电影详情
-        let url=`/haha/ajax/detailmovie?movieId=${this.params.id}`
+        let url=`/xixi/ajax/detailmovie?movieId=${this.params.id}`
         this.$axios.get(url)
             .then((res)=>{
                 let data = res.detailMovie
                 // console.log(res)
                 this.datas = data
+                //console.log(this.datas)
             })
             .catch((err)=>{
                 console.log(err)
             })
+
+             setTimeout(()=>{
+              this.scroll = new BScroll('.gun',{click:true,scrollX:true}) //this值得是当前vue
+          },20)
         //获取影院信息
-        setTimeout(()=>{
-          // console.log(Data)
-            this.normalData(Data)
-            //this.movList = Data.cinemas
-            // this.date.push(
-            //     (new Date(Data.day).getMonth()+1)+'月'+(new Date(Data.day).getDate())+'日'
-            // )
-        },500)
-    
     }
 }
 </script>
@@ -175,9 +213,10 @@ export default {
         width:100%;
         z-index:-10;
         background-color: #333;
+        overflow:hidden;
         img{
             width:100%;
-            .h(188);
+            .h(170);
             opacity:.55;
             filter:blur(20px);      
             }
@@ -240,23 +279,29 @@ export default {
    
     }
     .addr-link{
-        .day{
-            
-            font-size: 14px;
-            text-align: center;
-            display: inline-block;
-            width:100%;
-            line-height: 43px;
-            margin-left: 4.5px;
-            display:flex;
-            .red{
-               border-bottom: 2px solid #f03d37;
-            color: #f03d37; 
+        .wrapper{
+            .w(375);
+            .h(45);
+            overflow:hidden;
+            .day{
+                font-size: 14px;
+                text-align: center;
+                display: inline-block;
+                width:100%;
+                line-height: 43px;
+                margin-left: 4.5px;
+                display:flex;
+                .w(1000);
+                li{
+                    .w(115);
+                }
+                .red{
+                border-bottom: 2px solid #f03d37;
+                color: #f03d37; 
+                }
+                
             }
-            li{
-                .w(115);
-            }
-        }
+         }
         .addrDetail{
             font-size:0px;
             li{
