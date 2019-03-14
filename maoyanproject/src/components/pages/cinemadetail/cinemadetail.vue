@@ -1,7 +1,7 @@
 <template>
-    <div class="cmdetail">
+<div class="cmdetail">
         <div class="hed">
-            <p class="back" @touchstart="back">返回</p>
+            <p class="back" @click="back">返回</p>
             <p class="nm">{{params.nm}}</p>      
         </div>
         <div class="section">
@@ -14,18 +14,22 @@
                     <img src="../../../common/img/location_icon.png" alt="">
                 </div>
             </div>
-                <div class="banner">
-                    <!-- {{moviesList}} -->
-                    <mt-swipe class="mt-swipe" @change="handleChange" :auto="0" :showIndicators="false">                    
-                        <mt-swipe-item
-                         v-for="(item,index) in moviesList"
-                         :key="index"
-                         class="swipe-item"
-                        >
-                        <img :src="item.img" alt=""
-                        
-                        ></mt-swipe-item>
-                    </mt-swipe>
+                <div class="banner wrapper">
+                    <!-- {{moviesList}} -->                 
+                        <div class="content">
+                            <div  @touchstart="handleChange(index,item.img)"
+                                v-for="(item,index) in moviesList"
+                                :key="index"
+                                class="swipe-item"
+                               >
+                                <img :src="item.img" alt=""
+                                 :class="index===num?'border':''"
+                                >
+                            </div>
+                        </div>
+                         <div class="banner_bg">
+                            <img :src="src" alt="">
+                        </div>                                         
                 </div>
                 <div class='movie-info'>
                         <h3 v-if="moviesList[num].sc!=='0.0'"><b>{{moviesList[num].nm}}</b><span>{{moviesList[num].sc}}<i>分</i></span></h3>
@@ -52,7 +56,7 @@
                             </div>
                             <div class="info-block">
                                 <p>{{item.lang}}   {{item.tp}}</p>
-                                <p class="f5 timeswitch">{{item.th}}</p>
+                                <p class="f5 th">{{item.th}}</p>
                             </div>
                         <div class="price">
                             <p><span class="vipPrice">￥{{item.vipPrice?item.vipPrice:30}}</span>{{item.vipPriceName}}</p>
@@ -84,17 +88,19 @@
                 </li>
             </ul>
         </div>
-    </div>
+     
+</div>
 </template>
 <script>
-
+import BScroll from 'better-scroll'
 export default {
     data(){
             return {
                 moviesList:[{}],
-                num:0,
+                num:0,//获取点击电影的下标
                 tuanDealList:[{}],
                 cianmeIndex:0,
+                src:'',
             }
         },   
     methods:{  
@@ -103,12 +109,14 @@ export default {
             this.$router.back("/cinema")
         },  
          //获取电影所处的数组下标
-        handleChange(index) {
+        handleChange(index,img) {
             this.num=index;
+            this.src=img;
+            //console.log(index)
         },  
         //获取时间日期对应的数组下标
         getCineme(index){
-            //console.log(index)
+           // console.log(index)
             this.cianmeIndex=index;
         },  
         //时间转换
@@ -136,6 +144,7 @@ export default {
                 let reg = /w.h/
                 let img = str.replace(reg,'128.120')
                 lists.push({
+                  
                     desc:data[i].desc,
                     img:img,
                     dur:data[i].dur,
@@ -148,7 +157,7 @@ export default {
                 })
             }
             this.moviesList = lists 
-            //console.log(this.moviesList) 
+           // console.log(this.moviesList) 
         },
         // 处理套餐信息
         tuanData(data){
@@ -190,24 +199,34 @@ export default {
             }
     },
     created() {
-        //console.log(this.params.id)
+       // console.log(this.params)
         if(!this.$route.params.id){//params 没有的时候是个空对象
             return this.$router.replace('/cinema')
         }
         let url=`/hehe/ajax/cinemaDetail?cinemaId=${this.params.id}`
         this.$axios.get(url)
         .then((res)=>{
-            ///console.log(res) 
+           // console.log(res) 
             //电影信息    
              this.normalData(res.showData.movies);
+              //设置背景图片为默认项
+            this.handleChange(0,this.moviesList[0].img);
+             this.$nextTick(()=>{
+                //banner的better-scroll
+                let scrollBanner = new BScroll('.banner',{
+                    scrollY:false,
+                    scrollX: true,
+                    click: true
+                })          
+             })           
              //套餐信息
-             this.tuanData(res.dealList.dealList);
-            
+             this.tuanData(res.dealList.dealList);          
              //arr.push(res.dealList.divideDealList) 
         })
         .catch((err)=>{
             console.log(err)
         })
+        
     },
 
 }
@@ -218,13 +237,13 @@ export default {
         .w(375);
         height:100%;
        background: #fff;
-       position: absolute;
+       position: fixed;
        top:0;
        bottom:0;
        left:0;
        right:0; 
        z-index: 10;
-       overflow: scroll;
+       overflow:scroll;
       .hed{
             .h(50);
             .w(375);
@@ -283,10 +302,44 @@ export default {
             .banner{
                 .h(135);
                 .w(375);
-                img{
-                    width:100%;
-                    height:100%;
+                position: relative;
+                overflow: hidden;               
+                .content{
+                    .h(135);
+                    .w(1200);
+                    display:flex;
+                    // float: left; 
+                    align-items :center;
+                    justify-content: center;
+                    div{
+                        .margin(0,5,0,5);
+                        img{
+                        .w(65);
+                        .h(95);
+                        display: block;
+                        }
+                        .border{
+                            border:3px solid #fff;
+                            .w(74);
+                            .h(109);
+                        }
+                    }                   
                 }
+                 .banner_bg{
+                        position:absolute;
+                        bottom:0;
+                        top:15px;
+                        z-index: -10;
+                        .w(375);
+                        height:100%;
+                        img{
+                            width: 100%;
+                            height:100%;
+                            filter:blur(30px);
+                            
+                        }
+                 }
+                
             }
             .movie-info{
                 .padding(11,15,11,15);
@@ -352,18 +405,15 @@ export default {
                         }
                         
                     }
+                    .th{
+                        .w(92);   
+                    }
                     .f5{
                             .margin(5,0,0,0);
                             color: #999;
                             font-size: @font-size-s;
-                            white-space: nowrap;
+                            //white-space: nowrap;
                         }
-                    .timeswitch{
-                        .w(92);
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
-
                     .buytick{
                         display: block;
                         width: 100%;
@@ -450,8 +500,6 @@ export default {
                  }
              }
          }
-
-
     }
 </style>
 
