@@ -52,7 +52,7 @@ export default {
           this.$nextTick(()=>{
                this.index=false;
           })
-         
+         console.log(this.movieme);
         })
     },
 }   

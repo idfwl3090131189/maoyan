@@ -1,8 +1,9 @@
 <template>
-    <div>
-    <div class="qd">
+    <div class="wrapper vertic">
+    <ul class="content">
+<div class="qd">
      <p>近期最受期待</p>
-     <div class="wrapper">
+     <div class="wrapper hx">
      <ul class="content oul">
         <li v-for="(item,index) in list" :key="index" class="lb">
             <img :src="item.img" height="115" width="85">
@@ -36,6 +37,8 @@
            </li>
        </ul>
     </div>
+    </ul>
+    
     </div>
 </template>
 <script>
@@ -111,7 +114,8 @@ export default {
     })
  },
  mounted() {
-     new BScroll('.wrapper',{scrollX: true});
+     new BScroll('.hx',{scrollX: true});
+     new BScroll('.vertic',{click: true});
  },
 }
 </script>
@@ -200,12 +204,21 @@ export default {
                .margin(42,0,0,0);
            }
            .yscl{
-               background: blue;
+               background: #3c9fe6;
+               border-radius: 4px;
            }
            .xkcl{
-               background: yellow;
+               background: #faaf00;
+               border-radius: 4px;
            }
        } 
     }
+}
+.vertic{
+    .w(375);
+    position:fixed;
+    .top(95);
+    bottom: 0;
+    overflow: hidden;
 }
 </style>
