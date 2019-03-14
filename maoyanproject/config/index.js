@@ -43,7 +43,12 @@ module.exports = {
         changeOrigin:true,
         pathRewrite:{'^/haha':''}
 
-      }
+      },
+      '/dd':{
+        target:'http://m.maoyan.com',
+        changeOrigin:true,
+        pathRewrite:{'^/dd':''}
+      },
 
     },
 
