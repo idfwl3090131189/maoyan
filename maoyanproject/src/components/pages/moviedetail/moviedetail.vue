@@ -67,6 +67,7 @@
 </template>
 <script>
 import BScroll from 'better-scroll'
+import qs from 'qs'
 export default {
     name:'moviedetail',
     data(){
@@ -100,7 +101,7 @@ export default {
             day:time,
             offset: 0,
             limit: 20,
-            districtId: -1,
+            districtIds: -1,
             lineId: -1,
             hallType: -1,
             brandId: -1,
@@ -111,9 +112,14 @@ export default {
             updateShowDay: true,
             reqId: '1552487216715',
             cityId: 1,
-        })
+        },
+        // {headers:{
+        //     'Content-Type':'application/json;charset=UTF-8'
+        //   }}
+       { headers:{'X-Requested-With': 'json'}}
+          )
         .then((data)=>{
-            //console.log(data)
+            console.log(data)
             this.normalData(data)
 
         })
@@ -135,7 +141,7 @@ export default {
                     return a.day.substr(2,2) - b.day.substr(2,2)
                     // new Date(a.day)-new Date(b.day)
             })  
-           // console.log(this.arr)
+         console.log(this.arr)
         },
     },
     computed:{
@@ -153,7 +159,7 @@ export default {
             return this.$router.replace('/movie/being')
         }
         //获取电影详情
-        let url=`/xixi/ajax/detailmovie?movieId=${this.params.id}`
+        let url=`/haha/ajax/detailmovie?movieId=${this.params.id}`
         this.$axios.get(url)
             .then((res)=>{
                 let data = res.detailMovie

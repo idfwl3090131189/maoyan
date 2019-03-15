@@ -48,7 +48,7 @@ module.exports = {
         target:'http://m.maoyan.com',
         changeOrigin:true,
         pathRewrite:{'^/dd':''}
-      },
+      }
 
     },
 
