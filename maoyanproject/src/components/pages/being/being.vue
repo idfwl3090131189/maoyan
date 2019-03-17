@@ -56,7 +56,7 @@ export default {
         }
     },
     created(){
-        let url = '/xixi/ajax/movieOnInfoList?token='
+        let url = '/haha/ajax/movieOnInfoList?token='
         let params = {};
        // let url ='http://m.maoyan.com/ajax/moreComingList?token=&movieIds=1228761%2C1225543%2C1261537%2C1212492%2C580298%2C1214652%2C1243239%2C1251817%2C507792%2C344262'
         this.$axios.get(url)

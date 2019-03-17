@@ -29,8 +29,8 @@
             <div class="wrapper gun">
                 <ul class='day content'>
                         <li 
-                        v-for='(item,index) in movList' 
-                        :key='index' @touchstart='going(index)' 
+                        v-for='(item,index) in list' 
+                        :key='index' @touchstart='go(index)' 
                         :class="sel==index?'red':''"
                         >
                             {{item.day}}
@@ -39,7 +39,7 @@
             </div> 
             <ul class='addrDetail'>
                 <li 
-                v-for='(text,index) in movList[index].detail[0].cinemas' 
+                v-for='(text,index) in movList' 
                 :key="index"
                 @click='gocinema'
                 >
@@ -67,21 +67,19 @@
 </template>
 <script>
 import BScroll from 'better-scroll'
+import qs from 'qs'
 export default {
     name:'moviedetail',
     data(){
         return {
            datas:{},
-           movList:[{day:'',
-                    detail:[{}],
-                    movieId:''}],
+           movList:[],
            list:[],
            index:0,
            sel:0,
            time:0,
            arr:[]
-        }
-        
+        }    
     },
     methods:{
         gocinema(){
@@ -92,10 +90,11 @@ export default {
             this.sel = index
         },
         go(index){
-        let murl = `/dd/ajax/movie?forceUpdate=${new Date().getTime()}`
+        this.sel = index
+        let murl = '/xixi/ajax/movie?forceUpdate=1552489089093'
         let now = new Date()
         let time = now.getFullYear()+'-'+[(now.getMonth()+1)>10?(now.getMonth()+1):('0'+(now.getMonth()+1))]+'-'+ (now.getDate()+index)
-        this.$axios.post(murl,{
+        this.$axios.post(murl,qs.stringify({
             movieId: `${this.params.id}`,
             day:time,
             offset: 0,
@@ -111,11 +110,20 @@ export default {
             updateShowDay: true,
             reqId: '1552487216715',
             cityId: 1,
-        })
+        }))
         .then((data)=>{
-            //console.log(data)
-            this.normalData(data)
-
+           // console.log(data)
+           if( index == 0 ){
+                let item = data.showDays.dates
+                if(this.list.length < item.length){
+                     for( var i = 0 ; i < item.length;i++ ){
+                    this.list.push({day:(new Date(item[i].date).getMonth()+1)+'月'+(new Date(item[i].date).getDate())+'日'})
+                    }   
+                }
+           }
+         // console.log(this.list)
+         this.movList=data.cinemas
+         
         })
         .catch((err)=>{
             console.log(err)
@@ -124,19 +132,6 @@ export default {
         back(){
             this.$router.back()
         },
-        normalData(Data){
-                this.arr.push({
-                    day:(new Date(Data.day).getMonth()+1)+'月'+(new Date(Data.day).getDate())+'日',
-                    detail:[{cinemas:Data.cinemas}],
-                    movieId:Data.movieId
-                })
-            this.movList = this.arr 
-            this.arr.sort((a,b)=>{
-                    return a.day.substr(2,2) - b.day.substr(2,2)
-                    // new Date(a.day)-new Date(b.day)
-            })  
-           // console.log(this.arr)
-        },
     },
     computed:{
         params(){
@@ -144,11 +139,8 @@ export default {
             return this.$route.params
         },
     },
-    created(){
-        for(var i = 0 ; i < 7 ; i++){
-            this.go(i)
-        }
-        
+    created(){   
+        this.go(0)
        if(!this.$route.params.nm){//params 没有的时候是个空对象
             return this.$router.replace('/movie/being')
         }
